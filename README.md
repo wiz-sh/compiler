@@ -35,8 +35,6 @@ Only stable entry points are exported. Formatter, linter, language service, and 
 
 ## Development
 
-Keep the [`types`](https://github.com/wiz-sh/types) repository beside this checkout, then run:
-
 ```console
 bun install
 bun run check
