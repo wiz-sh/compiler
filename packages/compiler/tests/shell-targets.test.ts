@@ -128,39 +128,46 @@ test("sh reports constructs that cannot be translated safely", () => {
     );
 });
 
-test("emits and executes the typed portable subset with PowerShell", () => {
-    const executable = Bun.which("pwsh");
+// A cold PowerShell startup on GitHub's Linux runner can exceed Bun's default.
+const powershellStartupTimeout = 20_000;
 
-    expect(executable).not.toBeNull();
+test(
+    "emits and executes the typed portable subset with PowerShell",
+    () => {
+        const executable = Bun.which("pwsh");
 
-    if (executable === null) {
-        return;
-    }
+        expect(executable).not.toBeNull();
 
-    const result = compileSource(portableSource, "/workspace/main.wiz", {
-        target: "powershell",
-        runtimeChecks: "none",
-    });
+        if (executable === null) {
+            return;
+        }
 
-    expect(result.diagnostics).toEqual([]);
+        const result = compileSource(portableSource, "/workspace/main.wiz", {
+            target: "powershell",
+            runtimeChecks: "none",
+        });
 
-    expect(result.files[0]?.fileName.endsWith("main.ps1")).toBe(true);
+        expect(result.diagnostics).toEqual([]);
 
-    const execution = Bun.spawnSync([
-        executable,
-        "-NoLogo",
-        "-NoProfile",
-        "-NonInteractive",
-        "-Command",
-        result.files[0]?.code ?? "",
-    ]);
+        expect(result.files[0]?.fileName.endsWith("main.ps1")).toBe(true);
 
-    expect(execution.stderr.toString()).toBe("");
+        const execution = Bun.spawnSync([
+            executable,
+            "-NoLogo",
+            "-NoProfile",
+            "-NonInteractive",
+            "-Command",
+            result.files[0]?.code ?? "",
+        ]);
 
-    expect(execution.exitCode).toBe(0);
+        expect(execution.stderr.toString()).toBe("");
 
-    expect(execution.stdout.toString()).toContain("Hello, world!");
-});
+        expect(execution.exitCode).toBe(0);
+
+        expect(execution.stdout.toString()).toContain("Hello, world!");
+    },
+    powershellStartupTimeout,
+);
 
 const controlFlowSource = `declare -T string name="world"
 
