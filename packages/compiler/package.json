@@ -1,6 +1,6 @@
 {
     "name": "@wiz-sh/compiler",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Compiler, type checker, and multi-shell emitter for the Wiz language",
     "license": "MIT",
     "repository": {
@@ -29,7 +29,7 @@
     },
     "dependencies": {
         "@wiz-sh/config": "^0.1.0",
-        "@wiz-sh/types": "^0.1.0"
+        "@wiz-sh/types": "^0.1.1"
     },
     "publishConfig": {
         "access": "public"

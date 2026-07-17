@@ -1,10 +1,42 @@
-import type { SourceFile, Statement } from "../ast/source-file.ts";
+import type {
+    ExternalCommandDeclaration,
+    SourceFile,
+    Statement,
+} from "../ast/source-file.ts";
 import type { Scope } from "../binding/scope.ts";
 import { DiagnosticCodes } from "../diagnostics/codes.ts";
 import type { Diagnostic } from "../diagnostics/diagnostic.ts";
 import { isAssignable } from "../types/assignability.ts";
 import { requiredType } from "../types/factory.ts";
 import type { WizType } from "../types/type.ts";
+
+function commandSubstitutionType(value: string, scope?: Scope): WizType {
+    const invocation =
+        /^\$\(\s*([A-Za-z_][A-Za-z0-9_.+-]*)(?:\s+([A-Za-z_][A-Za-z0-9_-]*))?/.exec(
+            value,
+        );
+
+    if (invocation === null) {
+        return requiredType("string");
+    }
+
+    const command = invocation[1] ?? "";
+
+    const symbol = scope?.resolve(command);
+
+    if (symbol?.declaration.kind !== "ExternalCommandDeclaration") {
+        return symbol?.type ?? requiredType("string");
+    }
+
+    const declaration = symbol.declaration as ExternalCommandDeclaration;
+
+    // Subcommands have their own stdout contracts, independent of the parent CLI.
+    const method = declaration.methods.find((candidate) => {
+        return candidate.name === invocation[2];
+    });
+
+    return method?.resultType ?? symbol.type;
+}
 
 /** Infers a shell argument without evaluating it or changing quoting semantics. */
 export function inferArgument(
@@ -61,14 +93,8 @@ export function inferArgument(
         return requiredType("bool");
     }
 
-    const commandSubstitution = /^\$\(\s*([A-Za-z_][A-Za-z0-9_-]*)/.exec(
-        unquoted,
-    );
-
-    if (commandSubstitution !== null) {
-        const command = commandSubstitution[1] ?? "";
-
-        return scope?.resolve(command)?.type ?? requiredType("string");
+    if (/^\$\(/.test(unquoted)) {
+        return commandSubstitutionType(unquoted, scope);
     }
 
     if (value.includes("$")) {

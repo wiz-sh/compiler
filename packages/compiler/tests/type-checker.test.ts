@@ -26,6 +26,19 @@ attempts=wrong
     );
 });
 
+test("command substitutions use declared subcommand result types", () => {
+    const result = compileSource(
+        `declare command wiz {
+    root(): path
+}
+declare -T string path="$(wiz root)"
+`,
+        "subcommand-result.wiz",
+    );
+
+    expect(result.diagnostics).toEqual([]);
+});
+
 test("arithmetic rejects typed nonnumeric operands", () => {
     const result = compileSource(
         `declare -T string service="web"
