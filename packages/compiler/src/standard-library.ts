@@ -1,25 +1,17 @@
-import coreutilsSource from "../../../wiz/types/coreutils/index.d.wiz" with {
+/// <reference path="./raw-modules.d.ts" />
+
+import coreutilsSource from "@wiz/types/coreutils/index.d.wiz" with {
     type: "text",
 };
-import bashSource from "../../../wiz/types/shell/bash.d.wiz" with {
+import bashSource from "@wiz/types/shell/bash.d.wiz" with { type: "text" };
+import cmdSource from "@wiz/types/shell/cmd.d.wiz" with { type: "text" };
+import fishSource from "@wiz/types/shell/fish.d.wiz" with { type: "text" };
+import powershellSource from "@wiz/types/shell/powershell.d.wiz" with {
     type: "text",
 };
-import cmdSource from "../../../wiz/types/shell/cmd.d.wiz" with {
-    type: "text",
-};
-import fishSource from "../../../wiz/types/shell/fish.d.wiz" with {
-    type: "text",
-};
-import powershellSource from "../../../wiz/types/shell/powershell.d.wiz" with {
-    type: "text",
-};
-import shSource from "../../../wiz/types/shell/sh.d.wiz" with { type: "text" };
-import zshSource from "../../../wiz/types/shell/zsh.d.wiz" with {
-    type: "text",
-};
-import wizSource from "../../../wiz/types/wiz/index.d.wiz" with {
-    type: "text",
-};
+import shSource from "@wiz/types/shell/sh.d.wiz" with { type: "text" };
+import zshSource from "@wiz/types/shell/zsh.d.wiz" with { type: "text" };
+import wizSource from "@wiz/types/wiz/index.d.wiz" with { type: "text" };
 import type { SourceFile } from "./ast/source-file.ts";
 import { bindSourceFile } from "./binding/binder.ts";
 import { Scope } from "./binding/scope.ts";

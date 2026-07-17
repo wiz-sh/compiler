@@ -1,7 +1,6 @@
 {
     "name": "@wiz/compiler",
     "version": "0.1.0",
-    "private": true,
     "license": "MIT",
     "type": "module",
     "types": "./dist/index.d.ts",
@@ -16,6 +15,7 @@
         "build": "bun build ./src/index.ts --outdir ./dist --target bun --format esm && tsc --project ./tsconfig.build.json"
     },
     "dependencies": {
-        "@wiz/config": "workspace:*"
+        "@wiz/config": "^0.1.0",
+        "@wiz/types": "^0.1.0"
     }
 }
