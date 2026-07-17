@@ -7,7 +7,7 @@
         "outDir": "./dist",
         "rootDir": "./src",
         "paths": {
-            "@wiz/config": [
+            "@wiz-sh/config": [
                 "../config/dist/index.d.ts"
             ]
         }

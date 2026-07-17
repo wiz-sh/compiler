@@ -1,5 +1,5 @@
 import { isAbsolute, join, resolve } from "node:path";
-import type { RuntimeChecks } from "@wiz/config";
+import type { RuntimeChecks } from "@wiz-sh/config";
 import type { SourceFile } from "./ast/source-file.ts";
 import { type BindingResult, bindSourceFile } from "./binding/binder.ts";
 import { Scope } from "./binding/scope.ts";

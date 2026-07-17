@@ -11,13 +11,13 @@
         "verbatimModuleSyntax": true,
         "allowImportingTsExtensions": true,
         "paths": {
-            "@wiz/config": [
+            "@wiz-sh/config": [
                 "./packages/config/src/index.ts"
             ],
-            "@wiz/compiler": [
+            "@wiz-sh/compiler": [
                 "./packages/compiler/src/index.ts"
             ],
-            "@wiz/types/*": [
+            "@wiz-sh/types/*": [
                 "../types/wiz/types/*"
             ]
         },

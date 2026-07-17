@@ -1,7 +1,14 @@
 {
-    "name": "@wiz/config",
+    "name": "@wiz-sh/config",
     "version": "0.1.0",
+    "description": "Discovery, validation, and normalization for Wiz project configuration",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wiz-sh/compiler.git",
+        "directory": "packages/config"
+    },
+    "homepage": "https://github.com/wiz-sh/compiler#readme",
     "type": "module",
     "types": "./dist/index.d.ts",
     "exports": {
@@ -18,5 +25,11 @@
     ],
     "scripts": {
         "build": "bun build ./src/index.ts --outdir ./dist --target bun --format esm && tsc --project ./tsconfig.build.json"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "engines": {
+        "bun": ">=1.2.0"
     }
 }

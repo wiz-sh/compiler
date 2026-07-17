@@ -4,7 +4,7 @@ Read `WIZ.md` for the product model before changing public behavior.
 
 ## Ownership
 
-This repository owns `@wiz/config` and `@wiz/compiler`: configuration, syntax, binding, checking, target lowering, emission, source maps, and compiler tests. Ambient declarations are consumed from the sibling `wiz-sh/types` repository.
+This repository owns `@wiz-sh/config` and `@wiz-sh/compiler`: configuration, syntax, binding, checking, target lowering, emission, source maps, and compiler tests. Ambient declarations are consumed from the sibling `wiz-sh/types` repository.
 
 ## Engineering rules
 

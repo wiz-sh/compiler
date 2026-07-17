@@ -1,7 +1,17 @@
 {
-    "name": "@wiz/compiler",
+    "name": "@wiz-sh/compiler",
     "version": "0.1.0",
+    "description": "Compiler, type checker, and multi-shell emitter for the Wiz language",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wiz-sh/compiler.git",
+        "directory": "packages/compiler"
+    },
+    "homepage": "https://github.com/wiz-sh/compiler#readme",
+    "bugs": {
+        "url": "https://github.com/wiz-sh/compiler/issues"
+    },
     "type": "module",
     "types": "./dist/index.d.ts",
     "exports": {
@@ -11,11 +21,20 @@
             "default": "./dist/index.js"
         }
     },
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "build": "bun build ./src/index.ts --outdir ./dist --target bun --format esm && tsc --project ./tsconfig.build.json"
     },
     "dependencies": {
-        "@wiz/config": "^0.1.0",
-        "@wiz/types": "^0.1.0"
+        "@wiz-sh/config": "^0.1.0",
+        "@wiz-sh/types": "^0.1.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "engines": {
+        "bun": ">=1.2.0"
     }
 }
