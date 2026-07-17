@@ -19,7 +19,7 @@ import { checkOpaqueBytesUsage } from "./checking/opaque-bytes.ts";
 import { DiagnosticCodes } from "./diagnostics/codes.ts";
 import type { Diagnostic } from "./diagnostics/diagnostic.ts";
 import { isAssignable } from "./types/assignability.ts";
-import { requiredType } from "./types/factory.ts";
+import { parseType, requiredType } from "./types/factory.ts";
 import type { WizType } from "./types/type.ts";
 
 export interface CheckOptions {
@@ -439,6 +439,35 @@ function checkAssignment(
     }
 }
 
+function checkMissingTypeAnnotation(
+    statement: Extract<Statement, { kind: "CommandStatement" }>,
+    file: SourceFile,
+    diagnostics: Diagnostic[],
+): void {
+    if (statement.name !== "declare" && statement.name !== "local") {
+        return;
+    }
+
+    const typeArgument = statement.arguments[0];
+
+    if (
+        typeArgument === undefined ||
+        typeArgument.value.startsWith("-") ||
+        parseType(typeArgument.value) === undefined
+    ) {
+        return;
+    }
+
+    diagnostics.push({
+        code: DiagnosticCodes.invalidTypedDeclaration,
+        message: `Typed ${statement.name} declarations require -T before ${typeArgument.value}; use ${statement.name} -T ${typeArgument.value} name="value"`,
+        severity: "error",
+        phase: "type",
+        fileName: file.fileName,
+        range: typeArgument.range,
+    });
+}
+
 function checkArithmetic(
     statement: Extract<Statement, { kind: "CommandStatement" }>,
     file: SourceFile,
@@ -662,6 +691,8 @@ function checkStatements(
                 });
             }
         } else if (statement.kind === "CommandStatement") {
+            checkMissingTypeAnnotation(statement, file, diagnostics);
+
             checkAssignment(statement, file, binding, diagnostics, options);
 
             checkArithmetic(statement, file, binding, diagnostics);

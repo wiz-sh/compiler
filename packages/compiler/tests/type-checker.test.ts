@@ -39,6 +39,25 @@ declare -T string path="$(wiz root)"
     expect(result.diagnostics).toEqual([]);
 });
 
+test("typed local declarations require the -T attribute", () => {
+    const result = compileSource(
+        `example(): string {
+    local string root=wiz
+    printf "%s\\n" "$root"
+}
+`,
+        "missing-type-attribute.wiz",
+    );
+
+    expect(result.diagnostics).toContainEqual(
+        expect.objectContaining({
+            code: "WIZ2002",
+            message:
+                'Typed local declarations require -T before string; use local -T string name="value"',
+        }),
+    );
+});
+
 test("arithmetic rejects typed nonnumeric operands", () => {
     const result = compileSource(
         `declare -T string service="web"

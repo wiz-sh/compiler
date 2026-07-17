@@ -1,6 +1,6 @@
 {
     "name": "@wiz-sh/compiler",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "Compiler, type checker, and multi-shell emitter for the Wiz language",
     "license": "MIT",
     "repository": {
