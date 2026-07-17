@@ -414,6 +414,12 @@ function emitRange(
         } else if (statement.kind === "TypeImportDeclaration") {
             // Type packages shape analysis only and must never affect shell execution.
             result += "";
+        } else if (
+            statement.kind === "EnvironmentDeclaration" ||
+            statement.kind === "ExternalCommandDeclaration"
+        ) {
+            // Ambient contracts describe runtime boundaries but are not shell commands.
+            result += "";
         } else if (statement.kind === "SourceImportDeclaration") {
             result += emitScopedSource(
                 file,

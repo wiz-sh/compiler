@@ -2,6 +2,7 @@ import { expect, test } from "bun:test";
 import {
     bindSourceFile,
     checkSourceFile,
+    compileSource,
     createStandardLibraryScope,
     getDocumentation,
     getStandardLibraryFiles,
@@ -141,6 +142,32 @@ deploy "/srv/app" "--force" "--verbose"
     const result = checkSourceFile(file, binding);
 
     expect(result.diagnostics).toEqual([]);
+});
+
+test("ambient declarations erase from executable shell output", () => {
+    const result = compileSource(
+        `declare command curl(host: string): stream
+declare env API_TOKEN?: string
+
+command -p curl https://example.com
+`,
+        "ambient-contracts.wiz",
+        { runtimeChecks: "none" },
+    );
+
+    expect(result.diagnostics).toEqual([]);
+
+    const output = result.files[0]?.code ?? "";
+
+    expect(output).not.toContain("declare command");
+
+    expect(output).not.toContain("declare env");
+
+    expect(output).toContain("command -p curl https://example.com");
+
+    expect(
+        Bun.spawnSync(["bash", "-n"], { stdin: new Blob([output]) }).exitCode,
+    ).toBe(0);
 });
 
 test("command option schemas validate values, requirements, conflicts, and overloads", () => {
